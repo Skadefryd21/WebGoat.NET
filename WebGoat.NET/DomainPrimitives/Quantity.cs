@@ -4,23 +4,23 @@ using System.ComponentModel.DataAnnotations;
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 namespace WebGoatCore.DomainPrimitives
 {
-    public class Quantity
-{
-    private ushort value { get; set; }
-
-    public static Result.Result<Quantity> Create(ushort value)
+    public record class Quantity
     {
-        if (value == 0)
+        public ushort value { get; init; } // Init can only be set via constructor, afterwards it is immutable
+
+        private Quantity(ushort value) // Constructor is private to force usage of Create()
         {
-            return Result.Result<Quantity>.Failure("Quantity må ikke være 0");
+            this.value = value;
+        } 
+
+        public static Result<Quantity> Create(ushort value)
+        {
+            if (value == 0)
+            {
+                return Result<Quantity>.Failure("Der må ikke bestilles 0 varer");
+            }
+
+            return Result<Quantity>.Success(new Quantity(value));
         }
-
-        return Result.Result<Quantity>.SuccessResult(new Quantity { value = value });
     }
-
-    public ushort GetValue()
-    {
-        return value;
-    }
-}
 }
