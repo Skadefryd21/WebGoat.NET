@@ -55,7 +55,7 @@ namespace WebGoatCore.Controllers
                 ModelState.AddModelError(string.Empty, "You have no items in your cart.");
             }
 
-            var customer = GetCustomerOrAddError();
+            Customer? customer = GetCustomerOrAddError();
             if (customer != null)
             {
                 var creditCard = GetCreditCardForUser();
@@ -79,13 +79,13 @@ namespace WebGoatCore.Controllers
         {
             model.Cart = HttpContext.Session.Get<Cart>("Cart")!;
 
-            var customer = GetCustomerOrAddError();
+            Customer? customer = GetCustomerOrAddError();
             if(customer == null)
             {
                 return View(model);
             }
 
-            var creditCard = GetCreditCardForUser();
+            CreditCard creditCard = GetCreditCardForUser();
             try
             {
                 creditCard.GetCardForUser();
@@ -121,7 +121,7 @@ namespace WebGoatCore.Controllers
                 creditCard.SaveCardForUser();
             }
 
-            var order = new Order
+            Order order = new Order
             {
                 ShipVia = model.ShippingMethod,
                 ShipName = model.ShipTarget,
@@ -138,7 +138,7 @@ namespace WebGoatCore.Controllers
                 EmployeeId = 1,
             };
 
-            var approvalCode = creditCard.ChargeCard(order.Total);
+            string approvalCode = creditCard.ChargeCard(order.Total);
 
             order.Shipment = new Shipment()
             {
@@ -148,7 +148,7 @@ namespace WebGoatCore.Controllers
             };
 
             //Create the order itself.
-            var orderId = _orderRepository.CreateOrder(order);
+            int orderId = _orderRepository.CreateOrder(order);
 
             //Create the payment record.
             _orderRepository.CreateOrderPayment(orderId, order.Total, creditCard.Number, creditCard.Expiry, approvalCode);
@@ -160,7 +160,7 @@ namespace WebGoatCore.Controllers
 
         public IActionResult Receipt(int? id)
         {
-            var orderId = HttpContext.Session.GetInt32("OrderId");
+            int? orderId = HttpContext.Session.GetInt32("OrderId");
             if (id != null)
             {
                 orderId = id;
@@ -188,7 +188,7 @@ namespace WebGoatCore.Controllers
 
         public IActionResult Receipts()
         {
-            var customer = GetCustomerOrAddError();
+            Customer? customer = GetCustomerOrAddError();
             if(customer == null)
             {
                 return View();
@@ -199,13 +199,13 @@ namespace WebGoatCore.Controllers
 
         public IActionResult PackageTracking(string? carrier, string? trackingNumber)
         {
-            var model = new PackageTrackingViewModel()
+            PackageTrackingViewModel model = new PackageTrackingViewModel()
             {
                 SelectedCarrier = carrier,
                 SelectedTrackingNumber = trackingNumber,
             };
 
-            var customer = GetCustomerOrAddError();
+            Customer? customer = GetCustomerOrAddError();
             if (customer != null)
             {
                 model.Orders = _orderRepository.GetAllOrdersByCustomerId(customer.CustomerId);
@@ -221,8 +221,8 @@ namespace WebGoatCore.Controllers
 
         private Customer? GetCustomerOrAddError()
         {
-            var username = _userManager.GetUserName(User);
-            var customer = _customerRepository.GetCustomerByUsername(username);
+            string? username = _userManager.GetUserName(User);
+            Customer? customer = _customerRepository.GetCustomerByUsername(username);
             if (customer == null)
             {
                 ModelState.AddModelError(string.Empty, "I can't identify you. Please log in and try again.");

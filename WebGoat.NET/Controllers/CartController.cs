@@ -2,6 +2,8 @@
 using WebGoatCore.Data;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using WebGoatCore.DomainPrimitives;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace WebGoatCore.Controllers
 {
@@ -33,6 +35,12 @@ namespace WebGoatCore.Controllers
         [HttpPost("{productId}")]
         public IActionResult AddOrder(int productId, short quantity) 
         {
+            Result<Quantity> result = Quantity.Create(quantity);
+            if (!result.IsSuccessful)
+            {
+                // Show error to view result.Error_msg;
+            }
+
             var product = _productRepository.GetProductById(productId);
             
             var cart = GetCart();
@@ -42,16 +50,24 @@ namespace WebGoatCore.Controllers
                 {
                     Discount = 0.0F,
                     ProductId = productId,
-                    Quantity = quantity, //brug quantity primitiv
+                    Quantity = result.Value, // Using Quantity primitive
                     Product = product,
                     UnitPrice = product.UnitPrice
                 };
                 cart.OrderDetails.Add(orderDetail.ProductId, orderDetail);
             }
             else
-            {
-                var originalOrder = cart.OrderDetails[productId];
-                originalOrder.Quantity += quantity;
+            { // Hele denne her kodeblok overholder ikke SRP
+                OrderDetail originalOrder = cart.OrderDetails[productId];
+                
+                int newQuantityValue = originalOrder.Quantity.Value + result.Value.Value; // Short + Short converts it to Int to avoid overflow issues
+                
+                if (newQuantityValue > short.MaxValue || newQuantityValue < short.MinValue)
+                {
+                    return BadRequest("Quantity would exceed allowed range");
+                }
+                
+                originalOrder.Quantity = Quantity.Create((short)newQuantityValue).Value;
             }
 
             HttpContext.Session.Set("Cart", cart);

@@ -6,14 +6,14 @@ namespace WebGoatCore.DomainPrimitives
 {
     public record class Quantity
     {
-        public ushort value { get; init; } // Init can only be set via constructor, afterwards it is immutable
+        public short Value { get; init; } // Init can only be set via constructor, afterwards it is immutable
 
-        private Quantity(ushort value) // Constructor is private to force usage of Create()
+        private Quantity(short value) // Constructor is private to force usage of Create()
         {
-            this.value = value;
+            this.Value = value;
         } 
 
-        public static Result<Quantity> Create(ushort value)
+        public static Result<Quantity> Create(short value)
         {
             if (value == 0)
             {

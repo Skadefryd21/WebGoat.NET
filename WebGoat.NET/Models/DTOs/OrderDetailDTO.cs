@@ -3,20 +3,20 @@ using System.ComponentModel.DataAnnotations;
 using WebGoatCore.DomainPrimitives;
 
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
-namespace WebGoatCore.Models
+namespace WebGoatCore.Models.DTOs
 {
-    public class OrderDetail
+    public class OrderDetailDTO
     {
         public int OrderId { get; set; }
         public int ProductId { get; set; }
         public double UnitPrice { get; set; }
-        public Quantity Quantity { get; set; }
+        public short Quantity { get; set; }
         public float Discount { get; set; }
 
-        public virtual Order Order { get; set; }
+        public virtual OrderDTO Order { get; set; }
         public virtual Product Product { get; set; }
 
         public decimal DecimalUnitPrice => Convert.ToDecimal(this.UnitPrice);
-        public decimal ExtendedPrice => DecimalUnitPrice * Convert.ToDecimal(1 - Discount) * Quantity.Value;
+        public decimal ExtendedPrice => DecimalUnitPrice * Convert.ToDecimal(1 - Discount) * Quantity;
     }
 }
