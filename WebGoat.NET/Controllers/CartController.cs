@@ -31,7 +31,7 @@ namespace WebGoatCore.Controllers
         }
 
         [HttpPost("{productId}")]
-        public IActionResult AddOrder(int productId, short quantity)
+        public IActionResult AddOrder(int productId, short quantity) 
         {
             var product = _productRepository.GetProductById(productId);
             
@@ -42,7 +42,7 @@ namespace WebGoatCore.Controllers
                 {
                     Discount = 0.0F,
                     ProductId = productId,
-                    Quantity = quantity,
+                    Quantity = quantity, //brug quantity primitiv
                     Product = product,
                     UnitPrice = product.UnitPrice
                 };
