@@ -5,17 +5,22 @@ using System.ComponentModel.DataAnnotations;
 namespace WebGoatCore.DomainPrimitives
 {
     public class Quantity
+{
+    private ushort value { get; set; }
+
+    public static Result.Result<Quantity> Create(ushort value)
     {
-        private ushort value { get; set; }
-
-        public Quantity(ushort value)
+        if (value == 0)
         {
-            if (value == 0)
-            {
-                return new Result.Result<Quantity>(false, "Quantity cannot be 0");
-            }
-
-            this.value = value;
+            return Result.Result<Quantity>.Failure("Quantity må ikke være 0");
         }
+
+        return Result.Result<Quantity>.SuccessResult(new Quantity { value = value });
     }
+
+    public ushort GetValue()
+    {
+        return value;
+    }
+}
 }

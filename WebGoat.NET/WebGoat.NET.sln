@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebGoat.NET", "WebGoat.NET.csproj", "{70B39295-5B06-CC16-C288-BF70ADA58284}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{70B39295-5B06-CC16-C288-BF70ADA58284}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70B39295-5B06-CC16-C288-BF70ADA58284}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70B39295-5B06-CC16-C288-BF70ADA58284}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70B39295-5B06-CC16-C288-BF70ADA58284}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {56890821-2549-49A8-A43B-0F35DA53C9EB}
+	EndGlobalSection
+EndGlobal

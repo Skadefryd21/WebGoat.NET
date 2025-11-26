@@ -10,10 +10,20 @@ namespace WebGoatCore.Result
         public bool Success = true;
         public string Error_msg = "";
 
-        public Result(bool success, string error_msg, T value = default)
+        public Result(bool success, string error_msg)
         {
             this.Success = success;
             this.Error_msg = error_msg;
         }
+        public static Result<T> SuccessResult(T value)
+        {
+            return new Result<T>(true, "");
+        }
+
+        public static Result<T> Failure(string error_msg)
+        {
+            return new Result<T>(false, error_msg);
+        }
     }
+    
 }
