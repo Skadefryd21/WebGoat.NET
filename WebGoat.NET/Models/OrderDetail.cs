@@ -10,7 +10,7 @@ namespace WebGoatCore.Models
         public int OrderId { get; set; }
         public int ProductId { get; set; }
         public double UnitPrice { get; set; }
-        public Quantity Quantity { get; set; }
+        public Quantity Quantity { get; set; } // Changed to Quantity primitive
         public float Discount { get; set; }
 
         public virtual Order Order { get; set; }

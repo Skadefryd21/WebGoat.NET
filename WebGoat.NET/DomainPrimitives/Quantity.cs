@@ -15,7 +15,7 @@ namespace WebGoatCore.DomainPrimitives
 
         public static Result<Quantity> Create(short value)
         {
-            if (value == 0)
+            if (value <= 0)
             {
                 return Result<Quantity>.Failure("Der må ikke bestilles 0 varer");
             }

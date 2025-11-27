@@ -61,7 +61,7 @@ namespace WebGoatCore.Data
             {
                 orderDetails.OrderId = order.OrderId;
                 sql += (i > 0 ? "," : "") +
-                    $"('{orderDetails.OrderId}','{orderDetails.ProductId}','{orderDetails.UnitPrice}','{orderDetails.Quantity}'," +
+                    $"('{orderDetails.OrderId}','{orderDetails.ProductId}','{orderDetails.UnitPrice}','{orderDetails.Quantity.Value}'," +
                     $"'{orderDetails.Discount}')";
             }
 
