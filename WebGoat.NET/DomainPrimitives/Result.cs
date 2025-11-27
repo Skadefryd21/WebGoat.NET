@@ -20,11 +20,19 @@ namespace WebGoatCore.DomainPrimitives
 
         public static Result<T> Success(T value)
         {
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value), "Value cannot be null for a successful result.");
+            }
             return new Result<T>(true, null, value);
         }
 
         public static Result<T> Failure(string error_msg)
         {
+            if (string.IsNullOrEmpty(error_msg))
+            {
+                throw new ArgumentException("Error message cannot be null or empty for a failed result.", nameof(error_msg));
+            }
             return new Result<T>(false, error_msg, default);
         }
     }
