@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using WebGoatCore.DomainPrimitives;
 using Microsoft.AspNetCore.Http.HttpResults;
+using WebGoatCore.ViewModels;
 
 namespace WebGoatCore.Controllers
 {
@@ -35,10 +36,15 @@ namespace WebGoatCore.Controllers
         [HttpPost("{productId}")]
         public IActionResult AddOrder(int productId, short quantity) 
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(StatusCodeViewModel.Create(new ApiResponse(400)));
+            }
+
             Result<Quantity> result = Quantity.Create(quantity);
             if (!result.IsSuccessful)
             {
-                // Show error to view result.Error_msg;
+                return BadRequest(StatusCodeViewModel.Create(new ApiResponse(400, result.Error_msg)));
             }
 
             var product = _productRepository.GetProductById(productId);
