@@ -10,7 +10,9 @@ namespace WebGoatCore.Models
         public int OrderId { get; set; }
         public int ProductId { get; set; }
         public double UnitPrice { get; set; }
-        public Quantity Quantity { get; set; } // Changed to Quantity primitive
+        // Make Quantity virtual so EF Core proxy generation (lazy/change-tracking proxies)
+        // can override the property where needed and avoid InvalidOperationException.
+        public virtual Quantity Quantity { get; set; } // Changed to Quantity primitive
         public float Discount { get; set; }
 
         public virtual Order Order { get; set; }

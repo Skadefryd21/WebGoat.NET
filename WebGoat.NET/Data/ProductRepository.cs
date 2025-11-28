@@ -28,7 +28,8 @@ namespace WebGoatCore.Data
                 // Turn this query to standard LINQ expression, because EF Core can't handle the remaining part
                 .AsEnumerable()
                 .GroupBy(od => od.Product)
-                .OrderByDescending(g => g.Sum(t => t.UnitPrice * t.Quantity))
+                // Quantity is a domain primitive (Quantity.Value is a short) so use .Value when doing arithmetic
+                .OrderByDescending(g => g.Sum(t => t.UnitPrice * t.Quantity.Value))
                 .Select(g => g.Key)
                 .Take(NOPTR)
                 .ToList();

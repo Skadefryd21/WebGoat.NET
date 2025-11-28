@@ -111,7 +111,9 @@ namespace WebGoatCore
 
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings
             {
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                // Ensure we can serialize/deserialize the Quantity domain primitive stored in session
+                Converters = { new WebGoatCore.DomainPrimitives.QuantityJsonConverter() }
             };
 
             services.AddScoped<CustomerRepository>();

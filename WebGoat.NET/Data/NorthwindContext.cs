@@ -54,6 +54,16 @@ namespace WebGoatCore.Data
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<OrderDetail>().HasKey(a => new { a.ProductId, a.OrderId });
+
+            // Map the Quantity domain primitive (Quantity.Value : short) to a single numeric column
+            // so EF Core will persist the underlying short value and materialize a Quantity instance
+            // when reading from the database.
+            modelBuilder.Entity<OrderDetail>()
+                .Property(od => od.Quantity)
+                .HasConversion(
+                    q => q.Value, // Quantity -> short when saving
+                    v => WebGoatCore.DomainPrimitives.Quantity.Create((short)v).Value // short -> Quantity when reading
+                );
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
